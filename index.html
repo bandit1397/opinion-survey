@@ -3,17 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <title>Employee Opinion Survey</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+
   <h2>직원 여론조사 (익명)</h2>
+  <p style="font-size:0.9em; color:#555;">
+    본 설문은 익명으로 진행되며, 본인에게 발송된 링크는 1회만 사용 가능합니다.
+  </p>
 
   <iframe
-    data-tally-src="https://tally.so/r/44QgqB"
+    id="tallyFrame"
     width="100%"
-    height="900"
+    height="950"
     frameborder="0">
   </iframe>
 
   <script async src="https://tally.so/widgets/embed.js"></script>
+
+  <script>
+    // 1️⃣ URL에서 참여코드 추출
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+
+    // 2️⃣ 참여코드 존재 여부 확인
+    if (!code) {
+      document.body.innerHTML = `
+        <h3>잘못된 접근입니다</h3>
+        <p>본 설문은 개인에게 발송된 링크를 통해서만 참여할 수 있습니다.</p>
+      `;
+    } else {
+      // 3️⃣ Tally 설문 URL에 참여코드 자동 전달
+      const tallyUrl =
+        "https://tally.so/r/44QgqB" +
+        "?participation_code=" + encodeURIComponent(code);
+
+      // 4️⃣ iframe에 설문 로드
+      document.getElementById("tallyFrame")
+        .setAttribute("data-tally-src", tallyUrl);
+    }
+  </script>
+
 </body>
 </html>
